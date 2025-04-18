@@ -1,8 +1,11 @@
 public class PhoneProxy implements PhoneInterface {
     private final Phone realPhone;
+    private final PhoneCallMediator mediator;
 
-    public PhoneProxy(String number) {
+    public PhoneProxy(String number, PhoneCallMediator mediator) {
         this.realPhone = Phone.getInstance(number);
+        this.mediator = mediator;
+        mediator.registerPhone(this);
     }
 
     @Override
@@ -14,8 +17,14 @@ public class PhoneProxy implements PhoneInterface {
     @Override
     public State getState() { return realPhone.getState(); }
 
-    private void setState(State state) {
+    public void setState(State state) {
         realPhone.setState(state);
+    }
+
+    public String getConnectedPhoneNumber() { return realPhone.getConnectedPhoneNumber(); }
+
+    public void setConnectedPhoneNumber(String connectedPhoneNumber) {
+        realPhone.setConnectedPhoneNumber(connectedPhoneNumber);
     }
 
     @Override
@@ -25,27 +34,19 @@ public class PhoneProxy implements PhoneInterface {
             return;
         }
         realPhone.replenishBalance(amount);
-        System.out.println(amount + " rubbles added to the balance.\nCurrent balance: " + realPhone.getBalance());
+        System.out.println(amount + " rubbles added to the balance.");
     }
 
-    public void call(PhoneProxy otherPhoneProxy) {
-        if (this.getNumber().equals(otherPhoneProxy.getNumber())) {
-            System.out.println("ERROR: you can't call yourself.");
-        }
-        else if (this.getState() == State.BLOCKED) {
-            System.out.println("ERROR: your phone is blocked, please replenish your balance.");
-        }
-        else if (this.getState() == State.IN_CALL ||
-                this.getState() == State.CALLING) {
-            System.out.println("ERROR: you are already calling someone.");
-        }
-        else if (otherPhoneProxy.getState() == State.IN_CALL ||
-                otherPhoneProxy.getState() == State.CALLING ||
-                otherPhoneProxy.getState() == State.RINGING) {
-            System.out.println("ERROR: this number is busy, please call again later.");
-        }
-        else {
-            realPhone.call(otherPhoneProxy.realPhone);
-        }
+    public void call(String toNumber) {
+        mediator.makeCall(this.getNumber(), toNumber);
+    }
+
+    public void answer() {
+        mediator.answer(this);
+    }
+
+    @Override
+    public String toString() {
+        return realPhone.toString();
     }
 }

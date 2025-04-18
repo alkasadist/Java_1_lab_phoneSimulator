@@ -7,6 +7,7 @@ public class Phone implements PhoneInterface {
     private final String number;
     private int balance = 0;
     private State state = State.WAITING;
+    private String connectedPhoneNumber = null;
 
     private Phone(String number) { this.number = number; }
 
@@ -26,17 +27,20 @@ public class Phone implements PhoneInterface {
     @Override
     public State getState() { return state; }
 
+    public String getConnectedPhoneNumber() { return connectedPhoneNumber; }
+
+    public void setConnectedPhoneNumber(String connectedPhoneNumber) { this.connectedPhoneNumber = connectedPhoneNumber; }
+
+    @Override
     public void setState(State state) { this.state = state; }
 
+    @Override
     public void replenishBalance(int amount) {
         this.balance += amount;
     }
 
-    public void call(Phone otherPhone) {
-            this.setState(State.CALLING);
-            otherPhone.setState(State.RINGING);
+    @Override
+    public String toString() {
+        return "PHONE: [ " + "number = " + number + ", balance = " + balance + ", status = " + state + " ]";
     }
-
-//    public void answer();
-//    public void drop();
 }
