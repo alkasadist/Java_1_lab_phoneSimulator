@@ -1,24 +1,46 @@
-public class Phone {
-    private String number;
+import java.util.Map;
+import java.util.HashMap;
+
+public class Phone implements PhoneInterface {
+    private static final Map<String, Phone> instances = new HashMap<>();
+
+    private final String number;
     private int balance = 0;
-    protected enum State { WAITING, CALLING, IN_CALL, BLOCKED }
-    private State state;
+    private State state = State.WAITING;
+    private String connectedPhoneNumber = null;
 
-    public String getNumber() { return number; }
-    public int getBalance() { return balance; }
-    public State getState() { return state; }
+    private Phone(String number) { this.number = number; }
 
-    public Phone(String number) {
-        this.number = number;
+    public static Phone getInstance(String number) {
+        if (!instances.containsKey(number)) {
+            instances.put(number, new Phone(number));
+        }
+        return instances.get(number);
     }
 
-    public void replenishBalance(int amount) {
-        if (amount <= 0) {
-            System.out.println("ERROR: wrong deposit amount.");
-            return;
-        }
+    @Override
+    public String getNumber() { return number; }
 
+    @Override
+    public int getBalance() { return balance; }
+
+    @Override
+    public State getState() { return state; }
+
+    public String getConnectedPhoneNumber() { return connectedPhoneNumber; }
+
+    public void setConnectedPhoneNumber(String connectedPhoneNumber) { this.connectedPhoneNumber = connectedPhoneNumber; }
+
+    @Override
+    public void setState(State state) { this.state = state; }
+
+    @Override
+    public void replenishBalance(int amount) {
         this.balance += amount;
     }
 
+    @Override
+    public String toString() {
+        return "PHONE: [ " + "number = " + number + ", balance = " + balance + ", status = " + state + " ]";
+    }
 }
