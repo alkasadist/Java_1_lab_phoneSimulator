@@ -37,13 +37,24 @@ public class PhoneProxy implements PhoneInterface {
         System.out.println(amount + " rubbles added to the balance.");
     }
 
+    @Override
+    public void decreaseBalance(int amount) {
+        if (amount <= 0) {
+            System.out.println("SYSTEM ERROR.");
+            throw new IllegalArgumentException("SYSTEM ERROR: wrong decrease amount.");
+        }
+        realPhone.decreaseBalance(amount);
+    }
+
     public void call(String toNumber) {
         mediator.makeCall(this.getNumber(), toNumber);
     }
 
     public void answer() {
-        mediator.answer(this);
+        mediator.answerCall(this);
     }
+
+    public void drop() { mediator.dropCall(this); }
 
     @Override
     public String toString() {
