@@ -2,7 +2,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PhoneCallMediator {
+    private static PhoneCallMediator instance;
     private final Map<String, PhoneProxy> phones = new HashMap<>();
+
+    private PhoneCallMediator() {}
+
+    public static PhoneCallMediator getInstance() {
+        if (instance == null) {
+            instance = new PhoneCallMediator();
+        }
+        return instance;
+    }
 
     public void registerPhone(PhoneProxy phone) {
         phones.put(phone.getNumber(), phone);
