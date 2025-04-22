@@ -8,6 +8,37 @@ public class PhoneProxy implements PhoneInterface {
         mediator.registerPhone(this);
     }
 
+    private PhoneProxy(Builder builder) {
+        this.realPhone = builder.realPhone;
+        this.mediator = builder.mediator;
+        mediator.registerPhone(this);
+    }
+
+
+
+    public static class Builder {
+        private final Phone realPhone;
+        private final PhoneCallMediator mediator;
+
+        public Builder(String number, PhoneCallMediator mediator) {
+            this.realPhone = Phone.getInstance(number);
+            this.mediator = mediator;
+        }
+
+        public PhoneProxy build() { return new PhoneProxy(this); }
+
+        public Builder setBalance(int amount) {
+            if (amount <= 0) {
+                System.out.println("INIT ERROR: wrong balance amount set.");
+            } else {
+                this.realPhone.replenishBalance(amount);
+            }
+            return this;
+        }
+    }
+
+
+
     @Override
     public String getNumber() { return realPhone.getNumber(); }
 
