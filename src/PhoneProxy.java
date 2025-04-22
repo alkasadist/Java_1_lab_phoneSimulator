@@ -40,8 +40,8 @@ public class PhoneProxy implements PhoneInterface {
     @Override
     public void decreaseBalance(int amount) {
         if (amount <= 0) {
-            System.out.println("SYSTEM ERROR.");
-            throw new IllegalArgumentException("SYSTEM ERROR: wrong decrease amount.");
+            System.out.println("ERROR: wrong decrease amount.");
+            return;
         }
         realPhone.decreaseBalance(amount);
     }

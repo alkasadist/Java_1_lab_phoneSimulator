@@ -1,0 +1,29 @@
+Build an object-oriented model of the subject domain based on your assigned variant.
+Ensure the model can be extended with new types of objects and behaviors.
+To support low coupling between modules and extensibility
+of the software system, apply GoF design patterns.
+You must use at least two patterns from each group: creational, structural, and behavioral.
+Create a console application in Java that implements the designed object-oriented model.
+It is recommended to coordinate all design decisions with the instructor in advance.
+
+Variant 8:
+
+Design an object-oriented model of a phone.
+
+A phone has the following attributes:
+    Phone number
+    Balance
+
+The phone supports the following operations:
+    Make a call
+    Answer a call
+    End a call
+    Replenish balance
+
+The phone can be in the following states:
+    Waiting
+    Calling
+    In call
+    Blocked (balance is negative)
+
+Implement an application that demonstrates the phone transitioning between these states.
