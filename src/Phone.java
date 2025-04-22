@@ -27,12 +27,18 @@ public class Phone implements PhoneInterface {
     @Override
     public State getState() { return state; }
 
-    public String getConnectedPhoneNumber() { return connectedPhoneNumber; }
+    public String getConnectedPhoneNumber() {
+        return connectedPhoneNumber;
+    }
 
-    public void setConnectedPhoneNumber(String connectedPhoneNumber) { this.connectedPhoneNumber = connectedPhoneNumber; }
+    public void setConnectedPhoneNumber(String connectedPhoneNumber) {
+        this.connectedPhoneNumber = connectedPhoneNumber;
+    }
 
     @Override
-    public void setState(State state) { this.state = state; }
+    public void setState(State state) {
+        this.state = state;
+    }
 
     @Override
     public void replenishBalance(int amount) {
@@ -40,7 +46,15 @@ public class Phone implements PhoneInterface {
     }
 
     @Override
+    public void decreaseBalance(int amount) {
+        this.balance -= amount;
+    }
+
+    @Override
     public String toString() {
-        return "PHONE: [ " + "number = " + number + ", balance = " + balance + ", status = " + state + " ]";
+        return "PHONE: [ " +
+                "number = " + number +
+                ", balance = " + balance +
+                ", status = " + state + " ]";
     }
 }

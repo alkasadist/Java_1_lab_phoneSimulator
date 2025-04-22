@@ -6,4 +6,5 @@ public interface PhoneInterface {
     void setState(State state);
 
     void replenishBalance(int amount);
+    void decreaseBalance(int amount);
 }
