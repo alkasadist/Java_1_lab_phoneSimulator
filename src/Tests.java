@@ -13,16 +13,17 @@ public class Tests {
 
         PhoneProxy phone = new PhoneProxy("111", mediator);
         phone.replenishBalance(100);
-        phone.call("111"); // Должен вывести ошибку: you can't call yourself
+        phone.call("111"); // ERROR
 
     }
 
     static void BlockedPhoneTest(PhoneCallMediator mediator) {
         System.out.println("\nBlockedPhoneTest:");
 
-        PhoneProxy phoneLowBalance = new PhoneProxy("222", mediator);
-        phoneLowBalance.replenishBalance(10); // Меньше 50
-        phoneLowBalance.call("111"); // Должен сказать, что телефон заблокирован
+        PhoneProxy phoneLowBalance = new PhoneProxy.Builder("222", mediator)
+                .setBalance(10)
+                .build();
+        phoneLowBalance.call("111"); // ERROR
 
     }
 
@@ -37,16 +38,15 @@ public class Tests {
                 .build();
         PhoneProxy phoneC = new PhoneProxy("555", mediator);
 
-        phoneA.call("555"); // успешно
-        phoneB.call("555"); // ошибка: линия занята
+        phoneA.call("555"); // SUCCESS
+        phoneB.call("555"); // ERROR
     }
 
     static void NoActiveCallTest(PhoneCallMediator mediator) {
         System.out.println("\nNoActiveCallTest:");
 
         PhoneProxy phone = new PhoneProxy("666", mediator);
-        phone.replenishBalance(100);
-        phone.answer(); // Должен вывести ошибку: нет активного вызова
+        phone.answer(); // ERROR
 
     }
 
@@ -54,8 +54,7 @@ public class Tests {
         System.out.println("\nNoCallDropTest:");
 
         PhoneProxy phone = new PhoneProxy("777", mediator);
-        phone.replenishBalance(100);
-        phone.drop(); // Должен вывести ошибку: нет вызова для завершения
+        phone.drop(); // ERROR
 
     }
 
@@ -70,7 +69,6 @@ public class Tests {
         System.out.println(phone1);
         System.out.println(phone2);
 
-        phone1.replenishBalance(100);
         phone2.replenishBalance(100);
 
         phone1.call("2000");
