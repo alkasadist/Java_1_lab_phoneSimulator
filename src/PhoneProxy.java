@@ -65,7 +65,7 @@ public class PhoneProxy implements PhoneInterface {
             return;
         }
         realPhone.replenishBalance(amount);
-        System.out.println(amount + " rubbles added to the balance.");
+//        System.out.println(amount + " rubbles added to the balance.");
     }
 
     @Override
@@ -82,10 +82,20 @@ public class PhoneProxy implements PhoneInterface {
     }
 
     public void answer() {
+        if (this.realPhone.getState() != State.RINGING) {
+            System.out.println("ERROR: nobody is calling you.");
+            return;
+        }
         mediator.answerCall(this);
     }
 
-    public void drop() { mediator.dropCall(this); }
+    public void drop() {
+        if (this.realPhone.getState() != State.IN_CALL) {
+            System.out.println("ERROR: you are not in the call.");
+            return;
+        }
+        mediator.dropCall(this);
+    }
 
     @Override
     public String toString() {
