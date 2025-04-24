@@ -14,8 +14,6 @@ public class PhoneProxy implements PhoneInterface {
         mediator.registerPhone(this);
     }
 
-
-
     public static class Builder {
         private final Phone realPhone;
         private final PhoneCallMediator mediator;
@@ -37,8 +35,6 @@ public class PhoneProxy implements PhoneInterface {
         }
     }
 
-
-
     @Override
     public String getNumber() { return realPhone.getNumber(); }
 
@@ -52,7 +48,9 @@ public class PhoneProxy implements PhoneInterface {
         realPhone.setState(state);
     }
 
-    public String getConnectedPhoneNumber() { return realPhone.getConnectedPhoneNumber(); }
+    public String getConnectedPhoneNumber() {
+        return realPhone.getConnectedPhoneNumber();
+    }
 
     public void setConnectedPhoneNumber(String connectedPhoneNumber) {
         realPhone.setConnectedPhoneNumber(connectedPhoneNumber);
@@ -65,7 +63,6 @@ public class PhoneProxy implements PhoneInterface {
             return;
         }
         realPhone.replenishBalance(amount);
-//        System.out.println(amount + " rubbles added to the balance.");
     }
 
     @Override
@@ -78,23 +75,57 @@ public class PhoneProxy implements PhoneInterface {
     }
 
     public void call(String toNumber) {
-        mediator.makeCall(this.getNumber(), toNumber);
+        if (canCall(toNumber)) {
+            mediator.makeCall(this.getNumber(), toNumber);
+        }
     }
 
     public void answer() {
-        if (this.realPhone.getState() != State.RINGING) {
-            System.out.println("ERROR: nobody is calling you.");
-            return;
+        if (canAnswer()) {
+            mediator.answerCall(this);
         }
-        mediator.answerCall(this);
     }
 
     public void drop() {
+        if (canDrop()) {
+            mediator.dropCall(this);
+        }
+    }
+
+    private boolean canCall(String toNumber) {
+        if (this.getBalance() < 50) {
+            this.setState(State.BLOCKED);
+        }
+        if (this.getState() == State.BLOCKED) {
+            System.out.println("ERROR: your phone is blocked, replenish your balance.");
+            return false;
+        }
+        if (this.getNumber().equals(toNumber)) {
+            System.out.println("ERROR: you can't call yourself.");
+            return false;
+        }
+        if (this.getState() == State.CALLING ||
+                this.getState() == State.IN_CALL) {
+            System.out.println("ERROR: you are already calling someone.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean canAnswer() {
+        if (this.realPhone.getState() != State.RINGING) {
+            System.out.println("ERROR: nobody is calling you.");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean canDrop() {
         if (this.realPhone.getState() != State.IN_CALL) {
             System.out.println("ERROR: you are not in the call.");
-            return;
+            return false;
         }
-        mediator.dropCall(this);
+        return true;
     }
 
     @Override
