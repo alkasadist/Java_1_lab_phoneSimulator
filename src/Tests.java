@@ -1,11 +1,34 @@
 public class Tests {
     static void RunTests(PhoneCallMediator mediator) {
+        NumberNotFoundTest(mediator);
+        AlreadyCallingSomeoneTest(mediator);
         SelfCallTest(mediator);
         BlockedPhoneTest(mediator);
         AlreadyCallingTest(mediator);
         NoActiveCallTest(mediator);
         NoCallDropTest(mediator);
         SuccessfulCallTest(mediator);
+    }
+
+    static void NumberNotFoundTest(PhoneCallMediator mediator) {
+        System.out.println("\nNumberNotFoundTest:");
+
+        PhoneProxy phone = new PhoneProxy("111", mediator);
+        phone.replenishBalance(50);
+        phone.call("47348237948"); // ERROR
+
+    }
+
+    static void AlreadyCallingSomeoneTest(PhoneCallMediator mediator) {
+        System.out.println("\nAlreadyCallingSomeoneTest:");
+
+        PhoneProxy phone1 = new PhoneProxy("0", mediator);
+        phone1.replenishBalance(100);
+        PhoneProxy phone2 = new PhoneProxy("1", mediator);
+        PhoneProxy phone3 = new PhoneProxy("2", mediator);
+
+        phone1.call("1");
+        phone1.call("2"); // ERROR
     }
 
     static void SelfCallTest(PhoneCallMediator mediator) {
@@ -30,16 +53,16 @@ public class Tests {
     static void AlreadyCallingTest(PhoneCallMediator mediator) {
         System.out.println("\nAlreadyCallingTest:");
 
-        PhoneProxy phoneA = new PhoneProxy.Builder("333", mediator)
+        PhoneProxy phone1 = new PhoneProxy.Builder("333", mediator)
                 .setBalance(100)
                 .build();
-        PhoneProxy phoneB = new PhoneProxy.Builder("444", mediator)
+        PhoneProxy phone2 = new PhoneProxy.Builder("444", mediator)
                 .setBalance(100)
                 .build();
-        PhoneProxy phoneC = new PhoneProxy("555", mediator);
+        PhoneProxy phone3 = new PhoneProxy("555", mediator);
 
-        phoneA.call("555"); // SUCCESS
-        phoneB.call("555"); // ERROR
+        phone1.call("555");
+        phone2.call("555"); // ERROR
     }
 
     static void NoActiveCallTest(PhoneCallMediator mediator) {
