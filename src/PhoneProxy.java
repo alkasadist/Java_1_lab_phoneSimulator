@@ -75,41 +75,57 @@ public class PhoneProxy implements PhoneInterface {
     }
 
     public void call(String toNumber) {
+        if (canCall(toNumber)) {
+            mediator.makeCall(this.getNumber(), toNumber);
+        }
+    }
+
+    public void answer() {
+        if (canAnswer()) {
+            mediator.answerCall(this);
+        }
+    }
+
+    public void drop() {
+        if (canDrop()) {
+            mediator.dropCall(this);
+        }
+    }
+
+    private boolean canCall(String toNumber) {
         if (this.getBalance() < 50) {
             this.setState(State.BLOCKED);
         }
         if (this.getState() == State.BLOCKED) {
             System.out.println("ERROR: your phone is blocked, replenish your balance.");
-            return;
+            return false;
         }
         if (this.getNumber().equals(toNumber)) {
             System.out.println("ERROR: you can't call yourself.");
-            return;
+            return false;
         }
         if (this.getState() == State.CALLING ||
                 this.getState() == State.IN_CALL) {
             System.out.println("ERROR: you are already calling someone.");
-            return;
+            return false;
         }
-
-        mediator.makeCall(this.getNumber(), toNumber);
+        return true;
     }
 
-    public void answer() {
+    private boolean canAnswer() {
         if (this.realPhone.getState() != State.RINGING) {
             System.out.println("ERROR: nobody is calling you.");
-            return;
+            return false;
         }
-
-        mediator.answerCall(this);
+        return true;
     }
 
-    public void drop() {
+    private boolean canDrop() {
         if (this.realPhone.getState() != State.IN_CALL) {
             System.out.println("ERROR: you are not in the call.");
-            return;
+            return false;
         }
-        mediator.dropCall(this);
+        return true;
     }
 
     @Override
