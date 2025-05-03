@@ -1,3 +1,5 @@
+package phone;
+
 public interface PhoneInterface {
     String getNumber();
     int getBalance();

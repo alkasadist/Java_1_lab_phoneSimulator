@@ -1,0 +1,19 @@
+The following design patterns have been selected:
+
+Creational Patterns:
+    Multiton (for the phone.Phone class)
+        – to prevent the creation of phones with duplicate numbers.
+    Singleton (for the phone.PhoneCallMediator class)
+        – to ensure all calls are handled through a single controller.
+    Builder
+    – to simplify phone creation using method chaining.
+
+Structural Patterns:
+    Facade
+        – to simplify interaction between objects.
+    Proxy (using the phone.PhoneProxy class)
+        – to separate error and exception handling logic.
+
+Behavioral Patterns:
+    Mediator (using the phone.PhoneCallMediator class)
+        – to manage calls between phones through a dedicated interface.

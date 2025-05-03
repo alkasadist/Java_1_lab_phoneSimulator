@@ -1,3 +1,5 @@
+package phone;
+
 public class PhoneProxy implements PhoneInterface {
     private final Phone realPhone;
     private final PhoneCallMediator mediator;

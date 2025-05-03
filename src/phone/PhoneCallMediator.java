@@ -1,3 +1,5 @@
+package phone;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +28,6 @@ public class PhoneCallMediator {
 
         PhoneProxy fromPhone = phones.get(fromNumber);
         PhoneProxy toPhone = phones.get(toNumber);
-
 
         if (toPhone.getState() == State.IN_CALL ||
             toPhone.getState() == State.CALLING ||

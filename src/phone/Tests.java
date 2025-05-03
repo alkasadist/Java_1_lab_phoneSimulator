@@ -1,3 +1,5 @@
+package phone;
+
 public class Tests {
     static void RunTests(PhoneCallMediator mediator) {
         NumberNotFoundTest(mediator);
