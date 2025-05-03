@@ -1,3 +1,5 @@
+package phone;
+
 public enum State {
     WAITING, // phone is free
     CALLING, // phone is calling somebody
