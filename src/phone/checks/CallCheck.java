@@ -16,5 +16,5 @@ public abstract class CallCheck {
         return next == null || next.check(caller, toNumber);
     }
 
-    protected abstract boolean doCheck(PhoneProxy caller, String targetNumber);
+    protected abstract boolean doCheck(PhoneProxy caller, String toNumber);
 }

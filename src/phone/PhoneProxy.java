@@ -48,6 +48,7 @@ public class PhoneProxy implements PhoneInterface {
     @Override
     public State getState() { return realPhone.getState(); }
 
+    @Override
     public void setState(State state) {
         realPhone.setState(state);
     }
