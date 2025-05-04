@@ -1,5 +1,7 @@
 package phone;
 
+import phone.checks.*;
+
 public class PhoneProxy implements PhoneInterface {
     private final Phone realPhone;
     private final PhoneCallMediator mediator;
@@ -76,42 +78,36 @@ public class PhoneProxy implements PhoneInterface {
         realPhone.decreaseBalance(amount);
     }
 
-    public void call(String toNumber) {
+    public boolean call(String toNumber) {
         if (canCall(toNumber)) {
-            mediator.makeCall(this.getNumber(), toNumber);
+            return mediator.makeCall(this.getNumber(), toNumber);
         }
+        return false;
     }
 
-    public void answer() {
+    public boolean answer() {
         if (canAnswer()) {
-            mediator.answerCall(this);
+            return mediator.answerCall(this);
         }
+        return false;
     }
 
-    public void drop() {
+    public boolean drop() {
         if (canDrop()) {
-            mediator.dropCall(this);
+            return mediator.dropCall(this);
         }
+        return false;
     }
 
     private boolean canCall(String toNumber) {
-        if (this.getBalance() < 50) {
-            this.setState(State.BLOCKED);
-        }
-        if (this.getState() == State.BLOCKED) {
-            System.out.println("ERROR: your phone is blocked, replenish your balance.");
-            return false;
-        }
-        if (this.getNumber().equals(toNumber)) {
-            System.out.println("ERROR: you can't call yourself.");
-            return false;
-        }
-        if (this.getState() == State.CALLING ||
-                this.getState() == State.IN_CALL) {
-            System.out.println("ERROR: you are already calling someone.");
-            return false;
-        }
-        return true;
+        CallCheck balanceCheck = new BalanceCheck();
+        CallCheck selfCallCheck = new SelfCallCheck();
+        CallCheck alreadyCallingCheck = new AlreadyCallingCheck();
+
+        balanceCheck.setNext(selfCallCheck);
+        selfCallCheck.setNext(alreadyCallingCheck);
+
+        return balanceCheck.check(this, toNumber);
     }
 
     private boolean canAnswer() {

@@ -20,10 +20,10 @@ public class PhoneCallMediator {
         phones.put(phone.getNumber(), phone);
     }
 
-    public void makeCall(String fromNumber, String toNumber) {
+    public boolean makeCall(String fromNumber, String toNumber) {
         if (phones.get(toNumber) == null) {
             System.out.println("MEDIATOR ERROR: phone number " + toNumber + " not found.");
-            return;
+            return false;
         }
 
         PhoneProxy fromPhone = phones.get(fromNumber);
@@ -33,7 +33,7 @@ public class PhoneCallMediator {
             toPhone.getState() == State.CALLING ||
             toPhone.getState() == State.RINGING) {
             System.out.println("MEDIATOR ERROR: phone number " + toNumber + " is busy, call again later.");
-            return;
+            return false;
         }
 
         fromPhone.decreaseBalance(50);
@@ -43,18 +43,20 @@ public class PhoneCallMediator {
         toPhone.setConnectedPhoneNumber(fromPhone.getNumber());
 
         System.out.println(fromNumber + " is calling " + toNumber);
+        return true;
     }
 
-    public void answerCall(PhoneProxy caller) {
+    public boolean answerCall(PhoneProxy caller) {
         PhoneProxy callee = phones.get(caller.getConnectedPhoneNumber());
 
         caller.setState(State.IN_CALL);
         callee.setState(State.IN_CALL);
 
         System.out.println(callee.getNumber() + " answered the " + caller.getNumber());
+        return true;
     }
 
-    public void dropCall(PhoneProxy caller) {
+    public boolean dropCall(PhoneProxy caller) {
         PhoneProxy callee = phones.get(caller.getConnectedPhoneNumber());
 
         caller.setConnectedPhoneNumber(null);
@@ -63,5 +65,6 @@ public class PhoneCallMediator {
         callee.setState(State.WAITING);
 
         System.out.println(callee.getNumber() + " dropped the " + caller.getNumber());
+        return true;
     }
 }
