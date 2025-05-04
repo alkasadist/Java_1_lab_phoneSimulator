@@ -9,7 +9,11 @@ public class Tests {
         AlreadyCallingTest(mediator);
         NoActiveCallTest(mediator);
         NoCallDropTest(mediator);
-        SuccessfulCallTest(mediator);
+        SuccessfulCall(mediator);
+    }
+
+    static void showTestResult(boolean result) {
+        System.out.println(!result ? "✅ SUCCESS ✅" : "❌ FAIL ❌");
     }
 
     static void NumberNotFoundTest(PhoneCallMediator mediator) {
@@ -17,8 +21,9 @@ public class Tests {
 
         PhoneProxy phone = new PhoneProxy("111", mediator);
         phone.replenishBalance(50);
-        phone.call("47348237948"); // ERROR
+        boolean result = phone.call("47348237948");
 
+        showTestResult(result);
     }
 
     static void AlreadyCallingSomeoneTest(PhoneCallMediator mediator) {
@@ -30,7 +35,9 @@ public class Tests {
         PhoneProxy phone3 = new PhoneProxy("2", mediator);
 
         phone1.call("1");
-        phone1.call("2"); // ERROR
+        boolean result = phone1.call("2");
+
+        showTestResult(result);
     }
 
     static void SelfCallTest(PhoneCallMediator mediator) {
@@ -38,8 +45,9 @@ public class Tests {
 
         PhoneProxy phone = new PhoneProxy("111", mediator);
         phone.replenishBalance(100);
-        phone.call("111"); // ERROR
+        boolean result = phone.call("111");
 
+        showTestResult(result);
     }
 
     static void BlockedPhoneTest(PhoneCallMediator mediator) {
@@ -48,8 +56,9 @@ public class Tests {
         PhoneProxy phoneLowBalance = new PhoneProxy.Builder("222", mediator)
                 .setBalance(10)
                 .build();
-        phoneLowBalance.call("111"); // ERROR
+        boolean result = phoneLowBalance.call("111");
 
+        showTestResult(result);
     }
 
     static void AlreadyCallingTest(PhoneCallMediator mediator) {
@@ -64,27 +73,31 @@ public class Tests {
         PhoneProxy phone3 = new PhoneProxy("555", mediator);
 
         phone1.call("555");
-        phone2.call("555"); // ERROR
+        boolean result = phone2.call("555");
+
+        showTestResult(result);
     }
 
     static void NoActiveCallTest(PhoneCallMediator mediator) {
         System.out.println("\nNoActiveCallTest:");
 
         PhoneProxy phone = new PhoneProxy("666", mediator);
-        phone.answer(); // ERROR
+        boolean result = phone.answer();
 
+        showTestResult(result);
     }
 
     static void NoCallDropTest(PhoneCallMediator mediator) {
         System.out.println("\nNoCallDropTest:");
 
         PhoneProxy phone = new PhoneProxy("777", mediator);
-        phone.drop(); // ERROR
+        boolean result = phone.drop();
 
+        showTestResult(result);
     }
 
-    static void SuccessfulCallTest(PhoneCallMediator mediator) {
-        System.out.println("\nSuccessfulCallTest:");
+    static void SuccessfulCall(PhoneCallMediator mediator) {
+        System.out.println("\nSuccessfulCall:");
 
         PhoneProxy phone1 = new PhoneProxy.Builder("1000", mediator)
                 .setBalance(100)

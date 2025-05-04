@@ -78,22 +78,25 @@ public class PhoneProxy implements PhoneInterface {
         realPhone.decreaseBalance(amount);
     }
 
-    public void call(String toNumber) {
+    public boolean call(String toNumber) {
         if (canCall(toNumber)) {
-            mediator.makeCall(this.getNumber(), toNumber);
+            return mediator.makeCall(this.getNumber(), toNumber);
         }
+        return false;
     }
 
-    public void answer() {
+    public boolean answer() {
         if (canAnswer()) {
-            mediator.answerCall(this);
+            return mediator.answerCall(this);
         }
+        return false;
     }
 
-    public void drop() {
+    public boolean drop() {
         if (canDrop()) {
-            mediator.dropCall(this);
+            return mediator.dropCall(this);
         }
+        return false;
     }
 
     private boolean canCall(String toNumber) {
