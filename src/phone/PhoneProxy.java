@@ -1,5 +1,7 @@
 package phone;
 
+import phone.checks.*;
+
 public class PhoneProxy implements PhoneInterface {
     private final Phone realPhone;
     private final PhoneCallMediator mediator;
@@ -95,23 +97,14 @@ public class PhoneProxy implements PhoneInterface {
     }
 
     private boolean canCall(String toNumber) {
-        if (this.getBalance() < 50) {
-            this.setState(State.BLOCKED);
-        }
-        if (this.getState() == State.BLOCKED) {
-            System.out.println("ERROR: your phone is blocked, replenish your balance.");
-            return false;
-        }
-        if (this.getNumber().equals(toNumber)) {
-            System.out.println("ERROR: you can't call yourself.");
-            return false;
-        }
-        if (this.getState() == State.CALLING ||
-                this.getState() == State.IN_CALL) {
-            System.out.println("ERROR: you are already calling someone.");
-            return false;
-        }
-        return true;
+        CallCheck balanceCheck = new BalanceCheck();
+        CallCheck selfCallCheck = new SelfCallCheck();
+        CallCheck alreadyCallingCheck = new AlreadyCallingCheck();
+
+        balanceCheck.setNext(selfCallCheck);
+        selfCallCheck.setNext(alreadyCallingCheck);
+
+        return balanceCheck.check(this, toNumber);
     }
 
     private boolean canAnswer() {
